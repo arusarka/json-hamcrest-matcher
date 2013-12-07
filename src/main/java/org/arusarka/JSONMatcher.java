@@ -7,12 +7,13 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 import java.io.IOException;
+import java.util.Iterator;
 
-public class JSONHamcrestMatcher extends TypeSafeMatcher<String> {
+public class JSONMatcher extends TypeSafeMatcher<String> {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private JsonNode expectedJson;
 
-    public JSONHamcrestMatcher(String expectedJson) {
+    public JSONMatcher(String expectedJson) {
         try {
             this.expectedJson = objectMapper.readTree(expectedJson);
         } catch (IOException exception) {
@@ -28,7 +29,20 @@ public class JSONHamcrestMatcher extends TypeSafeMatcher<String> {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-        return expectedJson.equals(actualJson);
+
+        final Iterator<JsonNode> expectedJsonIterator = this.expectedJson.iterator();
+        final Iterator<JsonNode> actualJsonNodeIterator = actualJson.iterator();
+
+        while(expectedJsonIterator.hasNext()) {
+            final JsonNode currentExpectedJsonNode = expectedJsonIterator.next();
+            final JsonNode currentActualJsonNode = actualJsonNodeIterator.next();
+
+            if(!currentExpectedJsonNode.equals(currentExpectedJsonNode))
+                return false;
+        }
+
+        return true;
+
     }
 
     @Override
@@ -37,6 +51,6 @@ public class JSONHamcrestMatcher extends TypeSafeMatcher<String> {
     }
 
     public static Matcher<String> shouldMatchJson(String expectedJson) {
-        return new JSONHamcrestMatcher(expectedJson);
+        return new JSONMatcher(expectedJson);
     }
 }
