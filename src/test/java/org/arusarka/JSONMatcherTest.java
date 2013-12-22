@@ -13,19 +13,21 @@ import static org.junit.Assert.assertThat;
 
 public class JSONMatcherTest {
     @Test
-    public void shouldMatchSimpleJson() throws IOException {
-        String actual = readFile("src/test/resources/simple/actual.json");
-        String expected = readFile("src/test/resources/simple/expected.json");
-
-        assertThat(actual, shouldMatchJson(expected));
+    public void shouldMatchSameJson() throws IOException {
+        assertThat(readActualJsonForScenario("same_json"), shouldMatchJson(readExpectedJsonForScenario("same_json")));
     }
 
     @Test
     public void shouldMatchEvenIfAttributeIsAbsentInExpected() {
-        String actual = readFile("src/test/resources/attribute_absent_in_expected/actual.json");
-        String expected = readFile("src/test/resources/attribute_absent_in_expected/expected.json");
+        assertThat(readActualJsonForScenario("attribute_absent_in_expected"), shouldMatchJson(readExpectedJsonForScenario("attribute_absent_in_expected")));
+    }
 
-        assertThat(actual, shouldMatchJson(expected));
+    private String readExpectedJsonForScenario(final String scenarioName) {
+        return readFile("src/test/resources/fixtures/" + scenarioName + "/expected.json");
+    }
+
+    private String readActualJsonForScenario(final String scenarioName) {
+        return readFile("src/test/resources/fixtures/" + scenarioName + "/actual.json");
     }
 
     private String readFile(String filePath) {
