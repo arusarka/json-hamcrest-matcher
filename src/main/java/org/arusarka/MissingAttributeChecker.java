@@ -11,6 +11,7 @@ public class MissingAttributeChecker {
     private final List<String> errors = new ArrayList<String>();
 
     boolean doesMatch(JsonNode actualJson, JsonNode expectedJson) {
+        errors.clear();
         boolean retVal = true;
 
         final Iterator<String> expectedFieldNames = expectedJson.getFieldNames();
