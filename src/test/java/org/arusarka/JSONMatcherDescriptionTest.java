@@ -2,7 +2,7 @@ package org.arusarka;
 
 import org.junit.Test;
 
-import static org.arusarka.JSONMatcher.shouldMatchJson;
+import static org.arusarka.JSONMatcher.shouldContainJson;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -13,13 +13,17 @@ public class JSONMatcherDescriptionTest {
 
     @Test
     public void shouldDisplayErrorIfAttributeIsMissingInActual() {
+        assertScenarioErrorMessage("attribute_missing_in_actual", "Expected attribute \"bar\" but is missing.");
+    }
+
+    private void assertScenarioErrorMessage(String scenarioName, String message) {
         try {
-            assertThat(jsonTestHelper.readActualJsonForScenario("attribute_missing_in_actual"),
-                    shouldMatchJson(jsonTestHelper.readExpectedJsonForScenario("attribute_missing_in_actual")));
+            assertThat(jsonTestHelper.readActualJsonForScenario(scenarioName),
+                    shouldContainJson(jsonTestHelper.readExpectedJsonForScenario(scenarioName)));
             fail("should not have matched the json");
         } catch (AssertionError assertionError) {
             final String errorMessage = assertionError.getLocalizedMessage();
-            assertTrue("error message should contain missing attribute", errorMessage.contains("Expected attribute \"bar\" but is missing."));
+            assertTrue("Missing error message (" + message + ")." , errorMessage.contains(message));
         }
     }
 }

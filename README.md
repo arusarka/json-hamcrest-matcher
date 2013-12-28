@@ -11,6 +11,6 @@ Basic usage
 
 Using with JUnit 4
 
-    Assert.assertThat(actual, JSONMatcher.shouldMatchJson(expected));
+    Assert.assertThat(actual, JSONMatcher.shouldContainJson(expected));
 
-where "***actual***" is a string for the actual json to verify and "***expected***" is the expected json.
+where ***actual*** is a string for the actual json to verify and ***expected*** is the expected json.

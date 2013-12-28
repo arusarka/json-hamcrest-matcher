@@ -62,7 +62,7 @@ public class JSONMatcher extends TypeSafeMatcher<String> {
         }
     }
 
-    public static Matcher<String> shouldMatchJson(String expectedJson) {
+    public static Matcher<String> shouldContainJson(String expectedJson) {
         return new JSONMatcher(expectedJson);
     }
 }
