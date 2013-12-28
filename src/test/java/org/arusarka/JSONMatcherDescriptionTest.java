@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class JSONMatcherDescriptionTest {
-    private JSONTestHelper jsonTestHelper = new JSONTestHelper();
+    private TestHelper testHelper = new TestHelper();
 
 
     @Test
@@ -18,8 +18,8 @@ public class JSONMatcherDescriptionTest {
 
     private void assertScenarioErrorMessage(String scenarioName, String message) {
         try {
-            assertThat(jsonTestHelper.readActualJsonForScenario(scenarioName),
-                    shouldContainJson(jsonTestHelper.readExpectedJsonForScenario(scenarioName)));
+            assertThat(testHelper.readActualJsonForScenario(scenarioName),
+                    shouldContainJson(testHelper.readExpectedJsonForScenario(scenarioName)));
             fail("should not have matched the json");
         } catch (AssertionError assertionError) {
             final String errorMessage = assertionError.getLocalizedMessage();

@@ -51,7 +51,6 @@ public class JSONMatcher extends TypeSafeMatcher<String> {
         }
 
         return true;
-
     }
 
     @Override

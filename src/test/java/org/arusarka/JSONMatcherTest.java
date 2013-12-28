@@ -8,17 +8,17 @@ import static org.arusarka.JSONMatcher.shouldContainJson;
 import static org.junit.Assert.assertThat;
 
 public class JSONMatcherTest {
-    private JSONTestHelper jsonTestHelper = new JSONTestHelper();
+    private TestHelper testHelper = new TestHelper();
 
     @Test
     public void shouldMatchSameJson() throws IOException {
-        assertThat(jsonTestHelper.readActualJsonForScenario("same_json"),
-                shouldContainJson(jsonTestHelper.readExpectedJsonForScenario("same_json")));
+        assertThat(testHelper.readActualJsonForScenario("same_json"),
+                shouldContainJson(testHelper.readExpectedJsonForScenario("same_json")));
     }
 
     @Test
     public void shouldMatchEvenIfAttributeIsAbsentInExpected() {
-        assertThat(jsonTestHelper.readActualJsonForScenario("attribute_absent_in_expected"),
-                shouldContainJson(jsonTestHelper.readExpectedJsonForScenario("attribute_absent_in_expected")));
+        assertThat(testHelper.readActualJsonForScenario("attribute_missing_in_expected"),
+                shouldContainJson(testHelper.readExpectedJsonForScenario("attribute_missing_in_expected")));
     }
 }
