@@ -2,16 +2,11 @@ package org.arusarka;
 
 import org.codehaus.jackson.JsonNode;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class MissingAttributeChecker {
-
-    private final List<String> errors = new ArrayList<String>();
-
-    boolean doesMatch(JsonNode actualJson, JsonNode expectedJson) {
-        errors.clear();
+    boolean doesMatch(JsonNode actualJson, JsonNode expectedJson, List<String> errors) {
         boolean retVal = true;
 
         final Iterator<String> expectedFieldNames = expectedJson.getFieldNames();
@@ -24,9 +19,5 @@ public class MissingAttributeChecker {
             }
         }
         return retVal;
-    }
-
-    public List<String> errors() {
-        return errors;
     }
 }

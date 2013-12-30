@@ -8,18 +8,20 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class JSONMatcher extends TypeSafeMatcher<String> {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
     private final MissingAttributeChecker missingAttributeChecker = new MissingAttributeChecker();
     private JsonNode expectedJson;
     private List<String> errorList = new ArrayList<String>();
+    private JSONObjectNodeMatcher jSONObjectNodeMatcher;
 
-    public JSONMatcher(String expectedJson) {
+    public JSONMatcher(String expectedJson, JSONObjectNodeMatcher jSONObjectNodeMatcher, ObjectMapper objectMapper) {
+        this.jSONObjectNodeMatcher = jSONObjectNodeMatcher;
+        this.objectMapper = objectMapper;
         try {
-            this.expectedJson = objectMapper.readTree(expectedJson);
+            this.expectedJson = this.objectMapper.readTree(expectedJson);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
@@ -34,20 +36,8 @@ public class JSONMatcher extends TypeSafeMatcher<String> {
             throw new RuntimeException(exception);
         }
 
-        final Iterator<JsonNode> expectedJsonIterator = this.expectedJson.iterator();
-        final Iterator<JsonNode> actualJsonNodeIterator = actualJson.iterator();
-
-        if (!missingAttributeChecker.doesMatch(actualJson, this.expectedJson)) {
-            this.errorList.addAll(missingAttributeChecker.errors());
+        if (!jSONObjectNodeMatcher.doesMatch(actualJson, this.expectedJson, this.errorList)) {
             return false;
-        }
-
-        while (expectedJsonIterator.hasNext()) {
-            final JsonNode currentExpectedJsonNode = expectedJsonIterator.next();
-            final JsonNode currentActualJsonNode = actualJsonNodeIterator.next();
-
-            if (!currentExpectedJsonNode.equals(currentExpectedJsonNode))
-                return false;
         }
 
         return true;
@@ -56,12 +46,12 @@ public class JSONMatcher extends TypeSafeMatcher<String> {
     @Override
     public void describeTo(Description description) {
         description.appendText("\n");
-        for(int index = 0; index < errorList.size(); index++) {
-            description.appendText((index+1) + ")" + " " + errorList.get(index));
+        for (int index = 0; index < errorList.size(); index++) {
+            description.appendText((index + 1) + ")" + " " + errorList.get(index));
         }
     }
 
     public static Matcher<String> shouldContainJson(String expectedJson) {
-        return new JSONMatcher(expectedJson);
+        return new JSONMatcher(expectedJson, new JSONObjectNodeMatcher(new MissingAttributeChecker()), new ObjectMapper());
     }
 }

@@ -13,17 +13,17 @@ public class JSONMatcherDescriptionTest {
 
     @Test
     public void shouldDisplayErrorIfAttributeIsMissingInActual() {
-        assertScenarioErrorMessage("attribute_missing_in_actual", "Expected attribute \"bar\" but is missing.");
+        assertScenarioWithErrorMessage("attribute_missing_in_actual", "Expected attribute \"bar\" but is missing.");
     }
 
-    private void assertScenarioErrorMessage(String scenarioName, String message) {
+    private void assertScenarioWithErrorMessage(String scenarioName, String message) {
         try {
             assertThat(testHelper.readActualJsonForScenario(scenarioName),
                     shouldContainJson(testHelper.readExpectedJsonForScenario(scenarioName)));
             fail("should not have matched the json");
         } catch (AssertionError assertionError) {
             final String errorMessage = assertionError.getLocalizedMessage();
-            assertTrue("Missing error message (" + message + ")." , errorMessage.contains(message));
+            assertTrue("Missing error message ->" + message + "" , errorMessage.contains(message));
         }
     }
 }
