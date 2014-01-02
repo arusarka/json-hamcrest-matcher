@@ -1,18 +1,13 @@
 package org.arusarka;
 
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.List;
 
 import static org.arusarka.JSONMatcher.shouldContainJson;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
 
 public class JSONMatcherTest {
     private TestHelper testHelper = new TestHelper();
@@ -30,24 +25,22 @@ public class JSONMatcherTest {
     }
 
     @Test
-    public void shouldDelegateMatchingToObjectMatcher() throws IOException {
-        final JSONObjectNodeMatcher jsonObjectNodeMatcherMock = mock(JSONObjectNodeMatcher.class);
-        final ObjectMapper objectMapperMock = mock(ObjectMapper.class);
+    public void shouldFailToMatchIfAttributeIsMissingInActual() {
+        final JSONMatcher jsonMatcher = new JSONMatcher(testHelper.readExpectedJsonForScenario("attribute_missing_in_actual"), new ObjectMapper());
+        assertFalse(jsonMatcher.matchesSafely(testHelper.readActualJsonForScenario("attribute_missing_in_actual")));
+    }
 
-        final String expectedJsonString = testHelper.readExpectedJsonForScenario("simple_non_matching");
-        final String actualJsonString = testHelper.readActualJsonForScenario("simple_non_matching");
+    @Test
+    public void shouldMatchArrayAtTopLevel() {
+        assertThat(testHelper.readActualJsonForScenario("simple_array"),
+                shouldContainJson(testHelper.readExpectedJsonForScenario("simple_array")));
 
-        final JsonNode expectedJsonTree = mock(JsonNode.class);
-        final JsonNode actualJsonTree = mock(JsonNode.class);
+    }
 
-        when(objectMapperMock.readTree(expectedJsonString)).thenReturn(expectedJsonTree);
-        when(objectMapperMock.readTree(actualJsonString)).thenReturn(actualJsonTree);
-        when(jsonObjectNodeMatcherMock.doesMatch(eq(actualJsonTree), eq(expectedJsonTree), any(List.class)))
-                .thenReturn(false);
+    @Test
+    public void shouldMatchIfActualArrayContainsAllTheExpectedElements() {
+        assertThat(testHelper.readActualJsonForScenario("expected_array_contains_matching_object"),
+                shouldContainJson(testHelper.readExpectedJsonForScenario("expected_array_contains_matching_object")));
 
-        final JSONMatcher jsonMatcher = new JSONMatcher(expectedJsonString, jsonObjectNodeMatcherMock, objectMapperMock);
-        assertFalse("Should be \"false\" as object node match is setup to fail", jsonMatcher.matchesSafely(actualJsonString));
-
-        verify(jsonObjectNodeMatcherMock).doesMatch(eq(actualJsonTree), eq(expectedJsonTree), any(List.class));
     }
 }
