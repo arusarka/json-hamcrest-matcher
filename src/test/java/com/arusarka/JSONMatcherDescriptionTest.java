@@ -1,11 +1,9 @@
-package org.arusarka;
+package com.arusarka;
 
 import org.junit.Test;
 
-import static org.arusarka.JSONMatcher.shouldContainJson;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static com.arusarka.JSONMatcher.shouldContainJson;
+import static org.junit.Assert.*;
 
 public class JSONMatcherDescriptionTest {
     private TestHelper testHelper = new TestHelper();

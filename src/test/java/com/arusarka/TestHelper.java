@@ -1,4 +1,4 @@
-package org.arusarka;
+package com.arusarka;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

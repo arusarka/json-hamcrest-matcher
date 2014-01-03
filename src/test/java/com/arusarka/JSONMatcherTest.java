@@ -1,11 +1,11 @@
-package org.arusarka;
+package com.arusarka;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.arusarka.JSONMatcher.shouldContainJson;
+import static com.arusarka.JSONMatcher.shouldContainJson;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
