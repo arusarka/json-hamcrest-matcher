@@ -14,33 +14,33 @@ public class JSONMatcherTest {
 
     @Test
     public void shouldMatchSameJson() throws IOException {
-        assertThat(testHelper.readActualJsonForScenario("same_json"),
-                shouldContainJson(testHelper.readExpectedJsonForScenario("same_json")));
+        assertThat(testHelper.readActualJsonForScenario("passes_when_same_json"),
+                shouldContainJson(testHelper.readExpectedJsonForScenario("passes_when_same_json")));
     }
 
     @Test
     public void shouldMatchEvenIfAttributeIsAbsentInExpected() {
-        assertThat(testHelper.readActualJsonForScenario("attribute_missing_in_expected"),
-                shouldContainJson(testHelper.readExpectedJsonForScenario("attribute_missing_in_expected")));
+        assertThat(testHelper.readActualJsonForScenario("passes_when_attribute_missing_in_expected"),
+                shouldContainJson(testHelper.readExpectedJsonForScenario("passes_when_attribute_missing_in_expected")));
     }
 
     @Test
     public void shouldFailToMatchIfAttributeIsMissingInActual() {
-        final JSONMatcher jsonMatcher = new JSONMatcher(testHelper.readExpectedJsonForScenario("attribute_missing_in_actual"), new ObjectMapper());
-        assertFalse(jsonMatcher.matchesSafely(testHelper.readActualJsonForScenario("attribute_missing_in_actual")));
+        final JSONMatcher jsonMatcher = new JSONMatcher(testHelper.readExpectedJsonForScenario("fails_when_attribute_missing_in_actual"), new ObjectMapper());
+        assertFalse(jsonMatcher.matchesSafely(testHelper.readActualJsonForScenario("fails_when_attribute_missing_in_actual")));
     }
 
     @Test
     public void shouldMatchArrayAtTopLevel() {
-        assertThat(testHelper.readActualJsonForScenario("simple_array"),
-                shouldContainJson(testHelper.readExpectedJsonForScenario("simple_array")));
+        assertThat(testHelper.readActualJsonForScenario("passes_when_expected_array_contains_matching_elements"),
+                shouldContainJson(testHelper.readExpectedJsonForScenario("passes_when_expected_array_contains_matching_elements")));
 
     }
 
     @Test
     public void shouldMatchIfActualArrayContainsAllTheExpectedElements() {
-        assertThat(testHelper.readActualJsonForScenario("expected_array_contains_matching_object"),
-                shouldContainJson(testHelper.readExpectedJsonForScenario("expected_array_contains_matching_object")));
+        assertThat(testHelper.readActualJsonForScenario("passes_when_expected_array_contains_lesser_number_of_matching_object"),
+                shouldContainJson(testHelper.readExpectedJsonForScenario("passes_when_expected_array_contains_lesser_number_of_matching_object")));
 
     }
 }

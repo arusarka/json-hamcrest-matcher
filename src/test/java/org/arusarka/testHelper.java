@@ -1,8 +1,5 @@
 package org.arusarka;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -25,23 +22,5 @@ public class TestHelper {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-    }
-
-    public JsonNode readExpectedToJsonTree(final String scenarioName) {
-        return convertToJsonTree(readExpectedJsonForScenario(scenarioName));
-    }
-
-    public JsonNode readActualToJsonTree(final String scenarioName) {
-        return convertToJsonTree(readActualJsonForScenario(scenarioName));
-    }
-
-    private JsonNode convertToJsonTree(String jsonString) {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.readTree(jsonString);
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
-
     }
 }

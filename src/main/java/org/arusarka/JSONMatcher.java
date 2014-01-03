@@ -34,7 +34,6 @@ public class JSONMatcher extends TypeSafeMatcher<String> {
 
     @Override
     protected boolean matchesSafely(String actualJsonString) {
-
         try {
             actualJson = objectMapper.readTree(actualJsonString);
         } catch (IOException exception) {
@@ -153,5 +152,4 @@ public class JSONMatcher extends TypeSafeMatcher<String> {
             description.appendText((index+1) + ")" + " " + errorList.get(index));
         }
     }
-
 }

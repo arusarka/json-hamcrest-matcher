@@ -13,7 +13,7 @@ public class JSONMatcherDescriptionTest {
 
     @Test
     public void shouldDisplayErrorIfAttributeIsMissingInActual() {
-        assertScenarioWithErrorMessage("attribute_missing_in_actual",
+        assertScenarioWithErrorMessage("fails_when_attribute_missing_in_actual",
                 "Expected attribute \"bar\" inside \"top level\" in response but is missing.");
     }
 
