@@ -1,8 +1,8 @@
 package com.arusarka;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -41,9 +41,9 @@ public class JSONMatcher extends TypeSafeMatcher<String> {
         }
 
         if (expectedJson.isObject())
-            matchObjectNode(expectedJson, actualJson, "top level", errorList);
+            matchObjectNode(expectedJson.deepCopy(), actualJson.deepCopy(), "top level", errorList);
         else if (expectedJson.isArray())
-            matchArrayNode(expectedJson, actualJson, "top level", errorList);
+            matchArrayNode(expectedJson.deepCopy(), actualJson.deepCopy(), "top level", errorList);
         if (errorList.isEmpty())
             return true;
         return false;
@@ -55,7 +55,7 @@ public class JSONMatcher extends TypeSafeMatcher<String> {
         while (expectedArrayNodeIterator.hasNext()) {
             JsonNode expectedArrayNodeElement = expectedArrayNodeIterator.next();
 
-            if(!checkMatchingNodeFound(actualArrayNode, expectedArrayNodeElement, fieldName)) {
+            if(!checkMatchingNodeFound(actualArrayNode.deepCopy(), expectedArrayNodeElement.deepCopy(), fieldName)) {
                 errors.add("Could not find " + expectedArrayNodeElement + " inside array field \"" + fieldName + "\".");
                 return;
             }
@@ -69,9 +69,9 @@ public class JSONMatcher extends TypeSafeMatcher<String> {
             List<String> errors = new ArrayList<String>();
 
             if (expectedArrayNodeElement.isValueNode())
-                matchValueNode(expectedArrayNodeElement, actualArrayNodeElement, fieldName, errors);
+                matchValueNode(expectedArrayNodeElement.deepCopy(), actualArrayNodeElement.deepCopy(), fieldName, errors);
             if (expectedArrayNodeElement.isObject())
-                matchObjectNode(expectedArrayNodeElement, actualArrayNodeElement, fieldName, errors);
+                matchObjectNode(expectedArrayNodeElement.deepCopy(), actualArrayNodeElement.deepCopy(), fieldName, errors);
             if (errors.isEmpty()) {
                 return true;
             }
@@ -84,19 +84,19 @@ public class JSONMatcher extends TypeSafeMatcher<String> {
 
 
         if (fieldsMissingListWithCurrentJson.isEmpty()) {
-            matchChildrenNodes(expectedJson, actualJson, errors);
+            matchChildrenNodes(expectedJson.deepCopy(), actualJson.deepCopy(), errors);
         } else {
             for (String fieldMissing : fieldsMissingListWithCurrentJson) {
                 errors.add("Expected attribute \"" + fieldMissing + "\" inside \"" + fieldName +
                         "\" in response but is missing.\n");
                 ((ObjectNode) expectedJson).remove(fieldMissing);
             }
-            matchChildrenNodes(expectedJson, actualJson, errors);
+            matchChildrenNodes(expectedJson.deepCopy(), actualJson.deepCopy(), errors);
         }
     }
 
     private void matchChildrenNodes(JsonNode expectedJson, JsonNode actualJson, List<String> errors) {
-        Iterator<String> expectedFiledNameIterator = expectedJson.getFieldNames();
+        Iterator<String> expectedFiledNameIterator = expectedJson.fieldNames();
         while (expectedFiledNameIterator.hasNext()) {
             String expectedFieldName = expectedFiledNameIterator.next();
 
@@ -119,7 +119,7 @@ public class JSONMatcher extends TypeSafeMatcher<String> {
     private List<String> findFieldsMissingBetweenExpectedAndActual(JsonNode expectedJson, JsonNode actualJson) {
         List<String> fieldsMissingListWithCurrentJson = new ArrayList<String>();
 
-        Iterator<String> expectedFieldNamesIterator = expectedJson.getFieldNames();
+        Iterator<String> expectedFieldNamesIterator = expectedJson.fieldNames();
 
         while (expectedFieldNamesIterator.hasNext()) {
             String expectedFieldName = expectedFieldNamesIterator.next();
@@ -132,17 +132,17 @@ public class JSONMatcher extends TypeSafeMatcher<String> {
 
     private void checkIfItsAMatchingValueNode(String fieldName, JsonNode expectedNode, JsonNode actualNode, List<String> errors) {
         if (expectedNode.isValueNode())
-            matchValueNode(expectedNode, actualNode, fieldName, errors);
+            matchValueNode(expectedNode.deepCopy(), actualNode.deepCopy(), fieldName, errors);
     }
 
     private void checkIfItsAMatchingObjectNode(String fieldName, JsonNode expectedNode, JsonNode actualNode, List<String> errors) {
         if (expectedNode.isObject())
-            matchObjectNode(expectedNode, actualNode, fieldName, errors);
+            matchObjectNode(expectedNode.deepCopy(), actualNode.deepCopy(), fieldName, errors);
     }
 
     private void checkIfItsAMatchingArrayNode(String fieldName, JsonNode expectedNode, JsonNode actualNode, List<String> errors) {
         if (expectedNode.isArray())
-            matchArrayNode(expectedNode, actualNode, fieldName, errors);
+            matchArrayNode(expectedNode.deepCopy(), actualNode.deepCopy(), fieldName, errors);
     }
 
     @Override
