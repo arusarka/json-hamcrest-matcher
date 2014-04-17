@@ -1,11 +1,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.arusarka</groupId>
+    <groupId>com.arusarka</groupId>
     <artifactId>json-hamcrest-matcher</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>json-hamcrest-matcher</name>
+    <description>
+        This is a hamcrest matcher for partially matching json objects.
+    </description>
+    <url>arusarka.com</url>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git:git://github.com/arusarka/json-hamcrest-matcher</connection>
+        <developerConnection>scm:git:git@github.com:arusarka/json-hamcrest-matcher.git</developerConnection>
+        <url>https://github.com/arusarka/json-hamcrest-matcher/tree/master</url>
+    </scm>
+    <developers>
+        <developer>
+            <id>arusarka</id>
+            <name>asur</name>
+            <email>arusarka@gmail.com</email>
+        </developer>
+    </developers>
     <dependencies>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -30,4 +52,21 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
